@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Best Quiz</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="index.js" type="module"></script>
+  </head>
+  <body>
+    <div class="main-action-container" id="start-game-div">
+      <h1>⚡ Mind Rush ⚡<br />Quiz Game</h1>
+
+      <div class="input-div">
+        <label for="nickname">Enter your name</label>
+        <input type="text" name="nickname" id="nickname" />
+      </div>
+
+      <button id="categories" class="main-btn">Choose Categories</button>
+      <button id="dificulty" class="main-btn">Choose Dificulty</button>
+
+      <div class="input-div">
+        <label for="num-of-questions-slider">Choose number of questions</label>
+        <p id="num-of-questions">10</p>
+        <input type="range" min="1" max="50" value="10"  id="num-of-questions-slider" />
+      </div>
+
+      <button class="main-btn" id="start-btn">Start Game</button>
+    </div>
+
+    <div class="main-action-container" id="play-game-div">
+      <div id="header-top-container">
+        <button id="exit-btn">X</button>
+        <p id="question-number">1/10</p>
+    </div>
+      <h2 id="score-title">Score: 0</h2>
+      <h3 id="question-text">Question</h3>
+      <div>
+        <div class="timer animatable">
+          <svg>
+            <circle cx="50%" cy="50%" r="40" />
+            <circle cx="50%" cy="50%" r="40" pathLength="1" />
+            <text x="100" y="100" text-anchor="middle">
+              <tspan id="timeLeft"></tspan>
+            </text>
+          </svg>
+        </div>
+      </div>
+      <div class="answer-container">
+        <button id="first-answer" class="answer-btn"></button>
+        <button id="second-answer" class="answer-btn"></button>
+        <button id="third-answer" class="answer-btn"></button>
+        <button id="fourth-answer" class="answer-btn"></button>
+      </div>
+    </div>
+  </body>
+</html>

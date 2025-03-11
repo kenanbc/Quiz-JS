@@ -1,0 +1,164 @@
+:root{
+    --paleMint: #E2F1E7;
+    --mossGreen: #629584;
+    --tealGreen: #387478;
+    --deepSteel: #243642;
+}
+
+
+body{
+    background-color: var(--paleMint);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: var(--deepSteel);
+}
+
+.main-action-container{
+    width: 30rem;
+    height: 45rem;
+    background-color: var(--mossGreen);
+    border-radius: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+}
+
+.main-btn{
+    width: 15rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    border-radius: 1.5rem;
+    border: 0;
+    background-color: var(--tealGreen);
+    color: white;
+}
+
+.main-btn:hover, .answer-btn:hover{
+    background-color: var(--deepSteel);
+    cursor: pointer;
+}
+
+.input-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+label, p{
+    width: fit-content;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"]{
+    width: 15rem;
+    height: 2.5rem;
+    border-radius: 1.5rem;
+    border: 0;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+input[type="range"]{
+    cursor: pointer;
+    width: 12rem;
+    height: 2rem;
+}
+
+input[type="range"]::-webkit-slider-runnable-track{
+    background: var(--deepSteel);
+    border-radius: 1rem
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    background: var(--mossGreen);
+}
+
+p{
+    margin: 0;
+}
+
+h1, h3{
+    text-align: center
+}
+
+/* #start-game-div{
+
+} */
+
+#play-game-div{
+    display: none;
+}
+
+.answer-btn{
+    width: 20rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    border-radius: 1.5rem;
+    border: 0;
+    background-color: var(--tealGreen);
+    color: white;
+}
+
+.answer-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    height: 20rem;
+}
+
+#header-top-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#exit-btn{
+    width: 3rem;
+    height: 1.5rem;
+    background-color: var(--tealGreen);
+    border: 0;
+    border-radius: 1rem;
+    color: white;
+}
+
+#exit-btn:hover{
+    cursor: pointer;
+    background-color: var(--deepSteel);
+}
+
+/********************************************************************************************/ 
+.timer > svg {
+    width: 200px;
+    height: 200px;
+}
+
+.timer > svg > circle {
+    fill: none;
+    stroke-opacity: 0.3;
+    stroke: var(--deepSteel);
+    stroke-width: 10;
+    transform-origin: center center;
+    transform: rotate(-90deg);
+}
+
+.timer > svg > circle + circle {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    stroke-linecap: round;
+    stroke-opacity: 1;
+}
+
+.timer > svg > text {
+    font-size: 2rem;
+    color: var(--deepSteel);
+}
