@@ -1,4 +1,4 @@
-:root{
+:root {
     --paleMint: #E2F1E7;
     --mossGreen: #629584;
     --tealGreen: #387478;
@@ -6,7 +6,7 @@
 }
 
 
-body{
+body {
     background-color: var(--paleMint);
     margin: 0;
     display: flex;
@@ -16,7 +16,7 @@ body{
     color: var(--deepSteel);
 }
 
-.main-action-container{
+.main-action-container {
     width: 30rem;
     height: 45rem;
     background-color: var(--mossGreen);
@@ -29,7 +29,7 @@ body{
     box-sizing: border-box;
 }
 
-.main-btn{
+.main-btn {
     width: 15rem;
     height: 3rem;
     font-size: 1.5rem;
@@ -39,25 +39,27 @@ body{
     color: white;
 }
 
-.main-btn:hover, .answer-btn:hover{
+.main-btn:hover,
+.answer-btn:hover {
     background-color: var(--deepSteel);
     cursor: pointer;
 }
 
-.input-div{
+.input-div {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-label, p{
+label,
+p {
     width: fit-content;
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
 }
 
-input[type="text"]{
+input[type="text"] {
     width: 15rem;
     height: 2.5rem;
     border-radius: 1.5rem;
@@ -66,13 +68,13 @@ input[type="text"]{
     box-sizing: border-box;
 }
 
-input[type="range"]{
+input[type="range"] {
     cursor: pointer;
     width: 12rem;
     height: 2rem;
 }
 
-input[type="range"]::-webkit-slider-runnable-track{
+input[type="range"]::-webkit-slider-runnable-track {
     background: var(--deepSteel);
     border-radius: 1rem
 }
@@ -81,11 +83,12 @@ input[type="range"]::-webkit-slider-thumb {
     background: var(--mossGreen);
 }
 
-p{
+p {
     margin: 0;
 }
 
-h1, h3{
+h1,
+h3 {
     text-align: center
 }
 
@@ -93,11 +96,11 @@ h1, h3{
 
 } */
 
-#play-game-div{
+#play-game-div {
     display: none;
 }
 
-.answer-btn{
+.answer-btn {
     width: 20rem;
     height: 3rem;
     font-size: 1.5rem;
@@ -107,7 +110,7 @@ h1, h3{
     color: white;
 }
 
-.answer-container{
+.answer-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -115,14 +118,14 @@ h1, h3{
     height: 20rem;
 }
 
-#header-top-container{
+#header-top-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-#exit-btn{
+#exit-btn {
     width: 3rem;
     height: 1.5rem;
     background-color: var(--tealGreen);
@@ -131,18 +134,49 @@ h1, h3{
     color: white;
 }
 
-#exit-btn:hover{
+#exit-btn:hover {
     cursor: pointer;
     background-color: var(--deepSteel);
 }
 
-/********************************************************************************************/ 
-.timer > svg {
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--paleMint);
+    min-width: 15rem;
+    z-index: 1;
+}
+
+.dropdown-content button {
+    color: black;
+    padding: 1rem 1.2rem;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    border: 0;
+}
+
+.dropdown-content button:hover {
+    background-color: var(--tealGreen);
+    color: white;
+    cursor: pointer;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: var(--deepSteel)
+}
+
+/********************************************************************************************/
+.timer>svg {
     width: 200px;
     height: 200px;
 }
 
-.timer > svg > circle {
+.timer>svg>circle {
     fill: none;
     stroke-opacity: 0.3;
     stroke: var(--deepSteel);
@@ -151,14 +185,14 @@ h1, h3{
     transform: rotate(-90deg);
 }
 
-.timer > svg > circle + circle {
+.timer>svg>circle+circle {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
     stroke-linecap: round;
     stroke-opacity: 1;
 }
 
-.timer > svg > text {
+.timer>svg>text {
     font-size: 2rem;
     color: var(--deepSteel);
 }

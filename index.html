@@ -16,9 +16,27 @@
         <input type="text" name="nickname" id="nickname" />
       </div>
 
-      <button id="categories" class="main-btn">Choose Categories</button>
-      <button id="dificulty" class="main-btn">Choose Dificulty</button>
+      <div class="dropdown">
+        <button id="categories-btn" class="main-btn dropbtn">Choose Categories</button>
+        <div class="dropdown-content" id="categories-dropdown">
+          <form id="categories-form">
+            <input type="checkbox" id="category-music" value="music"><label for="category-music">Music</label><br>
+            <input type="checkbox" id="category-history" value="history"><label for="category-history">History</label><br>
+            <input type="checkbox" id="category-science" value="science"><label for="category-science">Science</label><br>
+            <input type="checkbox" id="category-geography" value="geography"><label for="category-geography">Geography</label><br>
+            <input type="checkbox" id="category-film-and-tv" value="film_and_tv"><label for="category-film-and-tv">Film and TV</label>
+          </form>
+        </div>
+      </div>
 
+      <div class="dropdown">
+        <button id="dificulty-choose-btn" class="main-btn dropbtn">Choose Dificulty</button>
+        <div class="dropdown-content">
+          <button id="easy-dificulty-btn">EASY</button>
+          <button id="medium-dificulty-btn">MEDIUM</button>
+          <button id="hard-dificulty-btn">HARD</button>
+        </div>
+      </div>
       <div class="input-div">
         <label for="num-of-questions-slider">Choose number of questions</label>
         <p id="num-of-questions">10</p>
