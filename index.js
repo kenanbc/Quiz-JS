@@ -18,26 +18,43 @@ const dificultyBtn = document.querySelector("#dificulty-choose-btn");
 const easyDificultyBtn = document.querySelector("#easy-dificulty-btn");
 const mediumDificultyBtn = document.querySelector("#medium-dificulty-btn");
 const hardDificultyBtn = document.querySelector("#hard-dificulty-btn");
+const dificultyParagraph = document.querySelector("#dificulty-paragraph");
 
-const DEFAULTDIFICULTY = 'easy,medium,hard';
-const DEFAULTCATEGORIES = 'music,history,science,geography,film_and_tv';
+const scoreTitle = document.querySelector("#score-title");
 
-let choosenDificulty = DEFAULTDIFICULTY;
-let choosenCategories = DEFAULTCATEGORIES;
+const answerBtns = [...document.querySelectorAll(".answer-btn")];
+
+const DIFICULTY = 'easy,medium,hard';
+const CATEGORIES = 'music,history,science,geography,film_and_tv';
+const SCORE_TITLE = 'Score: ';
+
+let choosenDificulty = DIFICULTY;
+let choosenCategories = CATEGORIES;
+
+
+/******************************************************************************** */
+let data;
+const setOfAnswers = [];
+let questionCounter = 0;
+let scoreCounter = 0;
+/******************************************************************************* */
 
 easyDificultyBtn.addEventListener("click", () => {
     choosenDificulty = 'easy';
     dificultyBtn.textContent = 'Easy';
+    dificultyParagraph.textContent = 'EASY';
 })
 
 mediumDificultyBtn.addEventListener("click", () => {
     choosenDificulty = 'medium';
     dificultyBtn.textContent = 'Medium';
+    dificultyParagraph.textContent = 'MEDIUM';
 })
 
 hardDificultyBtn.addEventListener("click", () => {
     choosenDificulty = 'hard';
     dificultyBtn.textContent = 'Hard';
+    dificultyParagraph.textContent = 'HARD';
 })
 
 categoriesForm.addEventListener("change", () => {
@@ -45,12 +62,11 @@ categoriesForm.addEventListener("change", () => {
     choosenCategories = selectedCategories.map((category => category.value));
     if(selectedCategories.length === 0){
         categoriesBtn.textContent = 'Categories: ALL';
-        choosenCategories = DEFAULTCATEGORIES;
+        choosenCategories = CATEGORIES;
     }
-    else 
+    else
         categoriesBtn.textContent = 'Categories: ' + selectedCategories.length;
 })
-
 
 let resetTimerFunc;
 
@@ -62,11 +78,11 @@ startBtn.addEventListener("click", async () => {
     startGameDiv.style.display = 'none';
     playGameDiv.style.display = 'flex';
     
-    resetTimerFunc = runTimer(document.querySelector('.timer'));
-    questionNumber.textContent = `1/${numOfQuestionsSlider.value}`
+    data = await getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
 
-    const data = await getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
-    console.log(data);
+    newQuestionLogic();
+    console.log(answerBtns);
+    
     questionText.textContent = data[0].question.text;
 });
 
@@ -76,12 +92,21 @@ back.addEventListener("click", () => {
     nickname.value = '';
     numOfQuestionsSlider.value = 10;
     numOfQuestions.textContent = 10;
-    choosenDificulty = DEFAULTDIFICULTY;
+    choosenDificulty = DIFICULTY;
     dificultyBtn.textContent = 'Choose Dificulty'
     categoriesBtn.textContent = 'Choose Categories';
-    choosenCategories = DEFAULTCATEGORIES;
+    choosenCategories = CATEGORIES;
     let selectedCategories = [...document.querySelectorAll("#categories-form input[type='checkbox']:checked")];
     selectedCategories.forEach(checkbox => checkbox.checked = false);
+    setOfAnswers.length = 0;
+    questionCounter = 0;
+    scoreCounter = 0;
+    scoreTitle.textContent = SCORE_TITLE + scoreCounter;
+    answerBtns.forEach((btn) => {
+            btn.classList.remove("correct-answer-btn");
+            btn.classList.remove("wrong-answer-btn");
+            btn.disabled = false;
+    });
 
     if (resetTimerFunc) {
         resetTimerFunc();
@@ -89,4 +114,38 @@ back.addEventListener("click", () => {
 });
 
 
+const arrangeAllAnswers = (data) => {
+    setOfAnswers.push(data.correctAnswer);
+    setOfAnswers.push(...data.incorrectAnswers);
+    
+    for(let i = setOfAnswers.length - 1; i > 0; i--){
+        let rand = parseInt(Math.random() * (i + 1));
+        [setOfAnswers[i], setOfAnswers[rand]] = [setOfAnswers[rand], setOfAnswers[i]];
+    }
+        
+    answerBtns.forEach((button, i) => {
+        button.textContent = setOfAnswers[i];
+        button.addEventListener("click", () => {
+            answerBtns.forEach((btn) => {
+                if (btn.textContent === data.correctAnswer) {
+                    btn.classList.add("correct-answer-btn");
+                } else {
+                    btn.classList.add("wrong-answer-btn");
+                }
+                btn.disabled = true;
+            });
+            
+            if (button.textContent === data.correctAnswer) {
+                scoreCounter++;
+                scoreTitle.textContent = SCORE_TITLE + scoreCounter;
+            }
+        });
+    })
+};
 
+const newQuestionLogic = () => {
+    questionCounter++;
+    resetTimerFunc = runTimer(document.querySelector('.timer'));
+    questionNumber.textContent = `${questionCounter}/${numOfQuestionsSlider.value}`;
+    arrangeAllAnswers(data[questionCounter - 1]);
+};

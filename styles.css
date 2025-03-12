@@ -139,12 +139,22 @@ h3 {
     background-color: var(--deepSteel);
 }
 
+#dificulty-paragraph{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: var(--paleMint);
     min-width: 15rem;
     z-index: 1;
+}
+
+.dropdown-content-padding{
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 .dropdown-content button {
@@ -154,6 +164,11 @@ h3 {
     display: block;
     width: 100%;
     border: 0;
+}
+
+.dropdown-content form input,label{
+    margin: 1rem;
+    cursor: pointer;
 }
 
 .dropdown-content button:hover {
@@ -169,6 +184,25 @@ h3 {
 .dropdown:hover .dropbtn {
     background-color: var(--deepSteel)
 }
+
+.wrong-answer-btn{
+    background-color: #FE4F2D;
+}
+
+.correct-answer-btn{
+    background-color: #36BA98;
+}
+
+.answer-btn:disabled {
+    pointer-events: none;
+    opacity: 0.5; 
+    cursor: default; 
+}
+
+.answer-btn:disabled:hover {
+    background-color: #ccc;
+}
+
 
 /********************************************************************************************/
 .timer>svg {
