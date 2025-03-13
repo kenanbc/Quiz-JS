@@ -5,11 +5,11 @@ const nickname = document.querySelector("#nickname");
 const startBtn = document.querySelector("#start-btn");
 const startGameDiv = document.querySelector("#start-game-div");
 const playGameDiv = document.querySelector("#play-game-div");
-const back = document.querySelector("#exit-btn");
+const exitBtn = document.querySelector("#exit-btn");
 const questionText = document.querySelector("#question-text");
 const numOfQuestionsSlider = document.querySelector("#num-of-questions-slider");
 const numOfQuestions = document.querySelector("#num-of-questions");
-const questionNumber = document.querySelector("#question-number");
+const questionNumber = document.querySelector("#question-number-header");
 
 const categoriesForm = document.querySelector("#categories-form");
 const categoriesBtn = document.querySelector("#categories-btn");
@@ -27,17 +27,15 @@ const answerBtns = [...document.querySelectorAll(".answer-btn")];
 const DIFICULTY = 'easy,medium,hard';
 const CATEGORIES = 'music,history,science,geography,film_and_tv';
 const SCORE_TITLE = 'Score: ';
+const SLIDER_VALUE = 10;
 
 let choosenDificulty = DIFICULTY;
 let choosenCategories = CATEGORIES;
 
-
-/******************************************************************************** */
 let data;
 const setOfAnswers = [];
 let questionCounter = 0;
 let scoreCounter = 0;
-/******************************************************************************* */
 
 easyDificultyBtn.addEventListener("click", () => {
     choosenDificulty = 'easy';
@@ -74,24 +72,12 @@ numOfQuestionsSlider.addEventListener("input", () =>{
     numOfQuestions.textContent = numOfQuestionsSlider.value;
 })
 
-startBtn.addEventListener("click", async () => {
-    startGameDiv.style.display = 'none';
-    playGameDiv.style.display = 'flex';
-    
-    data = await getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
-
-    newQuestionLogic();
-    console.log(answerBtns);
-    
-    questionText.textContent = data[0].question.text;
-});
-
-back.addEventListener("click", () => {
+exitBtn.addEventListener("click", () => {
     startGameDiv.style.display = 'flex';
     playGameDiv.style.display = 'none';
     nickname.value = '';
-    numOfQuestionsSlider.value = 10;
-    numOfQuestions.textContent = 10;
+    numOfQuestionsSlider.value = SLIDER_VALUE;
+    numOfQuestions.textContent = SLIDER_VALUE;
     choosenDificulty = DIFICULTY;
     dificultyBtn.textContent = 'Choose Dificulty'
     categoriesBtn.textContent = 'Choose Categories';
@@ -109,43 +95,71 @@ back.addEventListener("click", () => {
     });
 
     if (resetTimerFunc) {
-        resetTimerFunc();
+        resetTimerFunc.resetTimer();
     }
 });
 
+startBtn.addEventListener("click", async () => {
+    startGameDiv.style.display = 'none';
+    playGameDiv.style.display = 'flex';
+    
+    data = await getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
+    btnEvents();
+    newQuestionLogic();
+});
 
-const arrangeAllAnswers = (data) => {
-    setOfAnswers.push(data.correctAnswer);
-    setOfAnswers.push(...data.incorrectAnswers);
+const arrangeAllAnswers = (question) => {
+    setOfAnswers.push(question.correctAnswer);
+    setOfAnswers.push(...question.incorrectAnswers);
     
     for(let i = setOfAnswers.length - 1; i > 0; i--){
         let rand = parseInt(Math.random() * (i + 1));
         [setOfAnswers[i], setOfAnswers[rand]] = [setOfAnswers[rand], setOfAnswers[i]];
     }
-        
+
     answerBtns.forEach((button, i) => {
         button.textContent = setOfAnswers[i];
-        button.addEventListener("click", () => {
-            answerBtns.forEach((btn) => {
-                if (btn.textContent === data.correctAnswer) {
-                    btn.classList.add("correct-answer-btn");
-                } else {
-                    btn.classList.add("wrong-answer-btn");
-                }
-                btn.disabled = true;
-            });
-            
-            if (button.textContent === data.correctAnswer) {
-                scoreCounter++;
-                scoreTitle.textContent = SCORE_TITLE + scoreCounter;
-            }
-        });
+        button.classList.remove("correct-answer-btn", "wrong-answer-btn");
+        button.disabled = false;
+        
+    });
+        
+    answerBtns.forEach((button, i) => {
+        button.textContent = setOfAnswers[i]; 
     })
 };
 
 const newQuestionLogic = () => {
-    questionCounter++;
+    if(questionCounter == numOfQuestionsSlider.value) return;
+    setOfAnswers.length = 0;
+    questionText.textContent = data[questionCounter].question.text;
     resetTimerFunc = runTimer(document.querySelector('.timer'));
-    questionNumber.textContent = `${questionCounter}/${numOfQuestionsSlider.value}`;
-    arrangeAllAnswers(data[questionCounter - 1]);
+    questionNumber.textContent = `${questionCounter + 1}/${numOfQuestionsSlider.value}`;
+    arrangeAllAnswers(data[questionCounter]);
+    questionCounter++;
+};
+
+const btnEvents = () => {
+    answerBtns.forEach(button => {
+        button.addEventListener("click", async () => {
+            if (button.disabled) return;
+            resetTimerFunc.stopTimer();
+            answerBtns.forEach((btn) => {
+                if (btn.textContent === data[questionCounter - 1].correctAnswer)
+                    btn.classList.add("correct-answer-btn");
+                else
+                    btn.classList.add("wrong-answer-btn");
+
+                btn.disabled = true;
+            });
+
+            if (button.textContent === data[questionCounter - 1].correctAnswer) {
+                scoreCounter++;
+                scoreTitle.textContent = SCORE_TITLE + scoreCounter;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            newQuestionLogic();
+        });
+    });
 };

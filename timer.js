@@ -18,6 +18,14 @@ export function runTimer(timerElement) {
         isRunning = false;
     }
 
+    function stopTimer() {
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+        }
+        isRunning = false;
+    }
+
     function startTimer() {
         if (isRunning) return;
 
@@ -38,5 +46,5 @@ export function runTimer(timerElement) {
 
     startTimer();
 
-    return resetTimer;
+    return { resetTimer, stopTimer };
 }
