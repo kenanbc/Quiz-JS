@@ -103,11 +103,16 @@ h3 {
 .answer-btn {
     width: 20rem;
     height: 3rem;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     border-radius: 1.5rem;
     border: 0;
+    padding: 0 1rem;
+    box-sizing: border-box;
     background-color: var(--tealGreen);
     color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .answer-container {
@@ -203,6 +208,31 @@ h3 {
     background-color: #ccc;
 }
 
+#main-finish-container{
+    display: none;
+    flex-direction: column;
+}
+
+#finish-container{
+    border: 1px solid black;
+    border-radius: 2rem;
+    width: 90%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+#finish-container h2, h3, h4{
+    text-align: center;
+}
+
+#finish-quote{
+    font-size: 1.3rem;
+}
+
+#finish-score{
+    font-size: 2rem;
+}
+
 
 /********************************************************************************************/
 .timer>svg {
@@ -229,4 +259,8 @@ h3 {
 .timer>svg>text {
     font-size: 2rem;
     color: var(--deepSteel);
+}
+
+.timer.animatable > svg > circle + circle {
+    transition: stroke-dashoffset 0.3s ease;
 }
