@@ -80,10 +80,14 @@ exitBtn.addEventListener("click", () => {
 });
 
 startBtn.addEventListener("click", async () => {
+    data = await config.getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
+    if(!data){
+        alert("No internet connection!");
+        return;
+    }
+
     startGameContainer.style.display = 'none';
     playGameContainer.style.display = 'flex';
-    
-    data = await config.getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
     assignBtnEvents();
     getNewQuestion();
 });
