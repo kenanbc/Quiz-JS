@@ -1,25 +1,26 @@
 :root {
-    --paleMint: #E2F1E7;
-    --mossGreen: #629584;
-    --tealGreen: #387478;
-    --deepSteel: #243642;
+    --pale-blue: #DDE6ED;
+    --muted-blue: #9DB2BF;
+    --steel-blue: #526D82;
+    --deep-navy: #27374D;
+    --primary-red: #E52020;
+    --forest-green: #3F7D58;
 }
 
-
 body {
-    background-color: var(--paleMint);
+    background-color: var(--pale-blue);
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: var(--deepSteel);
+    color: var(--deep-navy);
 }
 
 .main-action-container {
     width: 30rem;
     height: 45rem;
-    background-color: var(--mossGreen);
+    background-color: var(--muted-blue);
     border-radius: 2rem;
     display: flex;
     justify-content: space-evenly;
@@ -35,13 +36,13 @@ body {
     font-size: 1.5rem;
     border-radius: 1.5rem;
     border: 0;
-    background-color: var(--tealGreen);
+    background-color: var(--steel-blue);
     color: white;
 }
 
 .main-btn:hover,
 .answer-btn:hover {
-    background-color: var(--deepSteel);
+    background-color: var(--deep-navy);
     cursor: pointer;
 }
 
@@ -50,6 +51,13 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+#header-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
 }
 
 label,
@@ -75,16 +83,12 @@ input[type="range"] {
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
-    background: var(--deepSteel);
+    background: var(--deep-navy);
     border-radius: 1rem
 }
 
 input[type="range"]::-webkit-slider-thumb {
-    background: var(--mossGreen);
-}
-
-p {
-    margin: 0;
+    background: var(--muted-blue);
 }
 
 h1,
@@ -92,11 +96,11 @@ h3 {
     text-align: center
 }
 
-/* #start-game-div{
+#question-text{
+    font-size: 1.5rem;
+}
 
-} */
-
-#play-game-div {
+#play-game-container {
     display: none;
 }
 
@@ -108,7 +112,7 @@ h3 {
     border: 0;
     padding: 0 1rem;
     box-sizing: border-box;
-    background-color: var(--tealGreen);
+    background-color: var(--steel-blue);
     color: white;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -133,15 +137,20 @@ h3 {
 #exit-btn {
     width: 3rem;
     height: 1.5rem;
-    background-color: var(--tealGreen);
+    background-color: var(--steel-blue);
     border: 0;
     border-radius: 1rem;
     color: white;
+    font-weight: bolder;
 }
 
 #exit-btn:hover {
     cursor: pointer;
-    background-color: var(--deepSteel);
+    background-color: var(--deep-navy);
+}
+
+#question-number-header{
+    font-weight: bold;
 }
 
 #dificulty-paragraph{
@@ -152,7 +161,7 @@ h3 {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: var(--paleMint);
+    background-color: var(--pale-blue);
     min-width: 15rem;
     z-index: 1;
 }
@@ -177,7 +186,7 @@ h3 {
 }
 
 .dropdown-content button:hover {
-    background-color: var(--tealGreen);
+    background-color: var(--steel-blue);
     color: white;
     cursor: pointer;
 }
@@ -187,20 +196,20 @@ h3 {
 }
 
 .dropdown:hover .dropbtn {
-    background-color: var(--deepSteel)
+    background-color: var(--deep-navy)
 }
 
 .wrong-answer-btn{
-    background-color: #FE4F2D;
+    background-color: var(--primary-red);
 }
 
 .correct-answer-btn{
-    background-color: #36BA98;
+    background-color: var(--forest-green);
 }
 
 .answer-btn:disabled {
     pointer-events: none;
-    opacity: 0.5; 
+    opacity: 0.7; 
     cursor: default; 
 }
 
@@ -235,15 +244,24 @@ h3 {
 
 
 /********************************************************************************************/
+.timer-fade .main-action-container{
+    opacity: 0; 
+    transition: opacity 2.5s ease-in-out;
+}
+
+.show {
+    opacity: 1;
+}
+
 .timer>svg {
-    width: 200px;
-    height: 200px;
+    width: 6rem;
+    height: 6rem;
 }
 
 .timer>svg>circle {
     fill: none;
     stroke-opacity: 0.3;
-    stroke: var(--deepSteel);
+    stroke: var(--deep-navy);
     stroke-width: 10;
     transform-origin: center center;
     transform: rotate(-90deg);
@@ -258,7 +276,7 @@ h3 {
 
 .timer>svg>text {
     font-size: 2rem;
-    color: var(--deepSteel);
+    color: var(--deep-navy);
 }
 
 .timer.animatable > svg > circle + circle {
