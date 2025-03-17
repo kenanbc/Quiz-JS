@@ -1,3 +1,5 @@
+import { TimeFail, answerBtns } from "./index.js";
+
 export function runTimer(timerElement) {
     let timeLeft = 10;
     let timer = document.getElementById('timeLeft');
@@ -36,10 +38,12 @@ export function runTimer(timerElement) {
                 const normalizedTime = (10 - timeRemaining) / 10;
                 timerCircle.style.strokeDashoffset = normalizedTime;
                 timer.innerHTML = timeRemaining;
+                answerBtns.forEach(button => button.disabled = false)
             } else {
                 clearInterval(countdownTimer);
                 timerElement.classList.remove('animatable');
                 isRunning = false;
+                TimeFail();
             }
         }, 1000);
     }

@@ -1,14 +1,14 @@
-import { getQuestions } from './api.js';
+import * as config from './config.js';
 import { runTimer } from './timer.js';
 
+const startGameContainer = document.querySelector("#start-game-container");
+const playGameContainer = document.querySelector("#play-game-container");
 const nickname = document.querySelector("#nickname");
 const startBtn = document.querySelector("#start-btn");
-const startGameDiv = document.querySelector("#start-game-div");
-const playGameDiv = document.querySelector("#play-game-div");
 const exitBtn = document.querySelector("#exit-btn");
 const questionText = document.querySelector("#question-text");
 const numOfQuestionsSlider = document.querySelector("#num-of-questions-slider");
-const numOfQuestions = document.querySelector("#num-of-questions");
+const numOfQuestionsParagraph = document.querySelector("#num-of-questions");
 const questionNumber = document.querySelector("#question-number-header");
 
 const categoriesForm = document.querySelector("#categories-form");
@@ -27,47 +27,19 @@ const finishScore = document.querySelector("#finish-score");
 const finishNickname = document.querySelector("#finish-nickname");
 const finishQuote = document.querySelector("#finish-quote");
 
-const answerBtns = [...document.querySelectorAll(".answer-btn")];
+const timerClock = document.querySelector(".timer");
 
-const DIFICULTY = 'easy,medium,hard';
-const CATEGORIES = 'music,history,science,geography,film_and_tv';
-const SCORE_TITLE = 'Score: ';
-const SLIDER_VALUE = 10;
+export const answerBtns = [...document.querySelectorAll(".answer-btn")];
 
-let choosenDificulty = DIFICULTY;
-let choosenCategories = CATEGORIES;
-
-let data;
+let choosenDificulty = config.DIFICULTY;
+let choosenCategories = config.CATEGORIES;
 const setOfAnswers = [];
 let questionCounter = 0;
 let scoreCounter = 0;
+let data;
+let Timer;
 
-const victoryQuotes = [
-    "Knowledge is power – and I just proved it!",
-    "I came, I saw, I conquered… the quiz!",
-    "Brains over luck, every time!",
-    "Winning isn't everything, but it sure feels great!",
-    "Another victory for the curious mind!",
-    "Smart moves lead to sweet victories!",
-    "One step closer to becoming a trivia master!",
-    "I didn’t just guess – I knew it!",
-    "Wisdom always wins!",
-    "Quiz conquered. Next challenge?"
-];
-
-const failureQuotes = [
-    "Failure is just a step toward success!",
-    "I didn’t lose; I learned.",
-    "Mistakes are proof that I’m trying.",
-    "Even the best fail sometimes!",
-    "Next time, I'll do better!",
-    "Knowledge grows with every wrong answer.",
-    "Defeat today, victory tomorrow!",
-    "I may have lost, but I’m not giving up!",
-    "A wrong answer is just a lesson in disguise.",
-    "It’s not about how many times you fail, but how many times you rise!"
-];
-
+//EventListeners
 easyDificultyBtn.addEventListener("click", () => {
     choosenDificulty = 'easy';
     dificultyBtn.textContent = 'Easy';
@@ -91,83 +63,85 @@ categoriesForm.addEventListener("change", () => {
     choosenCategories = selectedCategories.map((category => category.value));
     if(selectedCategories.length === 0){
         categoriesBtn.textContent = 'Categories: ALL';
-        choosenCategories = CATEGORIES;
+        choosenCategories = config.CATEGORIES;
     }
     else
         categoriesBtn.textContent = 'Categories: ' + selectedCategories.length;
 })
 
-let resetTimerFunc;
-
 numOfQuestionsSlider.addEventListener("input", () =>{
-    numOfQuestions.textContent = numOfQuestionsSlider.value;
+    numOfQuestionsParagraph.textContent = numOfQuestionsSlider.value;
 })
 
 exitBtn.addEventListener("click", () => {
-    startGameDiv.style.display = 'flex';
-    playGameDiv.style.display = 'none';
-
+    startGameContainer.style.display = 'flex';
+    playGameContainer.style.display = 'none';
     resetGameParameters();
-    
 });
 
 startBtn.addEventListener("click", async () => {
-    startGameDiv.style.display = 'none';
-    playGameDiv.style.display = 'flex';
+    startGameContainer.style.display = 'none';
+    playGameContainer.style.display = 'flex';
     
-    data = await getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
-    btnEvents();
-    newQuestionLogic();
+    data = await config.getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
+    assignBtnEvents();
+    getNewQuestion();
 });
 
+startAgainBtn.addEventListener("click", () => {
+    finishContainer.style.display = 'none';
+    startGameContainer.style.display = 'flex';
+    resetGameParameters();
+});
+
+//Functions
 const arrangeAllAnswers = (question) => {
     setOfAnswers.push(question.correctAnswer);
     setOfAnswers.push(...question.incorrectAnswers);
     
     for(let i = setOfAnswers.length - 1; i > 0; i--){
-        let rand = parseInt(Math.random() * (i + 1));
+        let rand = Math.floor(Math.random() * (i + 1));
         [setOfAnswers[i], setOfAnswers[rand]] = [setOfAnswers[rand], setOfAnswers[i]];
     }
 
     answerBtns.forEach((button, i) => {
         button.textContent = setOfAnswers[i];
-        button.classList.remove("correct-answer-btn", "wrong-answer-btn");
-        button.disabled = false;
-        
+        button.classList.remove("correct-answer-btn", "wrong-answer-btn");        
     });
         
     answerBtns.forEach((button, i) => {
-        button.textContent = setOfAnswers[i]; 
+        button.textContent = setOfAnswers[i];   
     })
 };
 
-const newQuestionLogic = () => {
+const getNewQuestion = () => {
     if(questionCounter == numOfQuestionsSlider.value){
-        playGameDiv.style.display = 'none';
+        playGameContainer.style.display = 'none';
         finishContainer.style.display = 'flex';
         finishNickname.textContent = nickname.value;
         finishScore.textContent = `${scoreCounter}/${numOfQuestionsSlider.value}`
         if(scoreCounter >= +numOfQuestionsSlider.value / 2){
-            finishQuote.textContent = victoryQuotes[parseInt(Math.random() * victoryQuotes.length)]
+            finishQuote.textContent = config.victoryQuotes[Math.floor(Math.random() * config.victoryQuotes.length)]
         }
         else{
-            finishQuote.textContent = failureQuotes[parseInt(Math.random() * failureQuotes.length)];
+            finishQuote.textContent = config.failureQuotes[Math.floor(Math.random() * config.failureQuotes.length)];
         }
         return;
     }
+    timerClock.classList.add("show");
     setOfAnswers.length = 0;
-    resetTimerFunc = runTimer(document.querySelector('.timer'));
+    Timer = runTimer(document.querySelector('.timer'));
     questionText.textContent = data[questionCounter].question.text;
     questionNumber.textContent = `${questionCounter + 1}/${numOfQuestionsSlider.value}`;
     arrangeAllAnswers(data[questionCounter]);
     questionCounter++;
 };
 
-const btnEvents = () => {
+const assignBtnEvents = () => {
     answerBtns.forEach(button => {
         button.addEventListener("click", async () => {
             if (button.disabled) return;
-            resetTimerFunc.stopTimer();
+            Timer.stopTimer();
             answerBtns.forEach((btn) => {
                 if (btn.textContent === data[questionCounter - 1].correctAnswer)
                     btn.classList.add("correct-answer-btn");
@@ -179,42 +153,48 @@ const btnEvents = () => {
 
             if (button.textContent === data[questionCounter - 1].correctAnswer) {
                 scoreCounter++;
-                scoreTitle.textContent = SCORE_TITLE + scoreCounter;
+                scoreTitle.textContent = config.SCORE_TITLE + scoreCounter;
             }
 
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            newQuestionLogic();
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            getNewQuestion();
         });
     });
 };
 
-startAgainBtn.addEventListener("click", () => {
-    finishContainer.style.display = 'none';
-    startGameDiv.style.display = 'flex';
-    resetGameParameters();
-});
-
 const resetGameParameters = () => {
     nickname.value = '';
-    numOfQuestionsSlider.value = SLIDER_VALUE;
-    numOfQuestions.textContent = SLIDER_VALUE;
-    choosenDificulty = DIFICULTY;
+    numOfQuestionsSlider.value = config.SLIDER_VALUE;
+    numOfQuestionsParagraph.textContent = config.SLIDER_VALUE;
+    choosenDificulty = config.DIFICULTY;
     dificultyBtn.textContent = 'Choose Dificulty'
     categoriesBtn.textContent = 'Choose Categories';
-    choosenCategories = CATEGORIES;
+    choosenCategories = config.CATEGORIES;
     let selectedCategories = [...document.querySelectorAll("#categories-form input[type='checkbox']:checked")];
     selectedCategories.forEach(checkbox => checkbox.checked = false);
     setOfAnswers.length = 0;
     questionCounter = 0;
     scoreCounter = 0;
-    scoreTitle.textContent = SCORE_TITLE + scoreCounter;
+    scoreTitle.textContent = config.SCORE_TITLE + scoreCounter;
     answerBtns.forEach((btn) => {
             btn.classList.remove("correct-answer-btn");
             btn.classList.remove("wrong-answer-btn");
             btn.disabled = false;
     });
 
-    if (resetTimerFunc) {
-        resetTimerFunc.resetTimer();
+    if (Timer){
+        Timer.resetTimer();
     }
+};
+
+export const TimeFail = async () => {
+    answerBtns.forEach((btn) => {
+        if (btn.textContent === data[questionCounter - 1].correctAnswer)
+            btn.classList.add("correct-answer-btn");
+        else
+            btn.classList.add("wrong-answer-btn");
+        btn.disabled = true;
+    });
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    getNewQuestion();
 }
