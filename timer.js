@@ -1,54 +1,47 @@
 import { TimeFail, answerBtns } from "./index.js";
 
-export function runTimer(timerElement) {
-    let timeLeft = 10;
-    let timer = document.getElementById('timeLeft');
+export const runTimer = (timerElement) => {
+    const timer = document.querySelector('#timeLeft-number');
     const timerCircle = timerElement.querySelector('svg > circle + circle');
-    let countdownTimer;
+    let timeLeft = 10;
+    let countdownTimerID;
     let isRunning = false;
 
-    function resetTimer() {
-        if (countdownTimer) {
-            clearInterval(countdownTimer);
-            countdownTimer = null;
+    const resetTimer = () => {
+        if (countdownTimerID) {
+            clearInterval(countdownTimerID);
+            countdownTimerID = null;
         }
         timeLeft = 10;
-        timer.innerHTML = timeLeft;
-        timerCircle.style.strokeDashoffset = 1;
-        timerElement.classList.remove('animatable');
-        timerElement.classList.add('animatable');
+        timer.textContent = timeLeft;
         isRunning = false;
     }
 
-    function stopTimer() {
-        if (countdownTimer) {
-            clearInterval(countdownTimer);
-            countdownTimer = null;
+    const stopTimer = () => {
+        if (countdownTimerID) {
+            clearInterval(countdownTimerID);
+            countdownTimerID = null;
         }
         isRunning = false;
     }
 
-    function startTimer() {
+    const startTimer = () => {
         if (isRunning) return;
 
         isRunning = true;
-        countdownTimer = setInterval(function() {
+        countdownTimerID = setInterval(() =>{
             if (timeLeft > -1) {
-                const timeRemaining = timeLeft--;
-                const normalizedTime = (10 - timeRemaining) / 10;
+                let timeRemaining = timeLeft--;
+                let normalizedTime = (10 - timeRemaining) / 10; //svg animation
                 timerCircle.style.strokeDashoffset = normalizedTime;
-                timer.innerHTML = timeRemaining;
+                timer.textContent = timeRemaining;
                 answerBtns.forEach(button => button.disabled = false)
             } else {
-                clearInterval(countdownTimer);
-                timerElement.classList.remove('animatable');
-                isRunning = false;
+                stopTimer();
                 TimeFail();
             }
         }, 1000);
     }
 
-    startTimer();
-
-    return { resetTimer, stopTimer };
+    return { startTimer, resetTimer, stopTimer };
 }

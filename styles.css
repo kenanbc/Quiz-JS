@@ -18,7 +18,7 @@ body {
 }
 
 .main-action-container {
-    width: 30rem;
+    width: 80rem;
     height: 45rem;
     background-color: var(--muted-blue);
     border-radius: 2rem;
@@ -31,7 +31,7 @@ body {
 }
 
 .main-btn {
-    width: 15rem;
+    width: 55rem;
     height: 3rem;
     font-size: 1.5rem;
     border-radius: 1.5rem;
@@ -46,7 +46,7 @@ body {
     cursor: pointer;
 }
 
-.input-div {
+.input-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,7 +57,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 80%;
+    width: 70%;
 }
 
 label,
@@ -68,7 +68,7 @@ p {
 }
 
 input[type="text"] {
-    width: 15rem;
+    width: 55rem;
     height: 2.5rem;
     border-radius: 1.5rem;
     border: 0;
@@ -78,7 +78,7 @@ input[type="text"] {
 
 input[type="range"] {
     cursor: pointer;
-    width: 12rem;
+    width: 20rem;
     height: 2rem;
 }
 
@@ -105,7 +105,7 @@ h3 {
 }
 
 .answer-btn {
-    width: 20rem;
+    width: 55rem;
     height: 3rem;
     font-size: 1.2rem;
     border-radius: 1.5rem;
@@ -162,7 +162,7 @@ h3 {
     display: none;
     position: absolute;
     background-color: var(--pale-blue);
-    min-width: 15rem;
+    min-width: 55rem;
     z-index: 1;
 }
 
@@ -235,13 +235,12 @@ h3 {
 }
 
 #finish-quote{
-    font-size: 1.3rem;
+    font-size: 2rem;
 }
 
 #finish-score{
     font-size: 2rem;
 }
-
 
 /********************************************************************************************/
 .timer-fade .main-action-container{

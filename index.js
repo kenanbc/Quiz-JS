@@ -14,11 +14,11 @@ const questionNumber = document.querySelector("#question-number-header");
 const categoriesForm = document.querySelector("#categories-form");
 const categoriesBtn = document.querySelector("#categories-btn");
 
-const dificultyBtn = document.querySelector("#dificulty-choose-btn");
-const easyDificultyBtn = document.querySelector("#easy-dificulty-btn");
-const mediumDificultyBtn = document.querySelector("#medium-dificulty-btn");
-const hardDificultyBtn = document.querySelector("#hard-dificulty-btn");
-const dificultyParagraph = document.querySelector("#dificulty-paragraph");
+const dificultyBtn = document.querySelector("#difficulty-choose-btn");
+const easyDifficultyBtn = document.querySelector("#easy-difficulty-btn");
+const mediumDifficultyBtn = document.querySelector("#medium-difficulty-btn");
+const hardDifficultyBtn = document.querySelector("#hard-difficulty-btn");
+const difficultyParagraph = document.querySelector("#difficulty-paragraph");
 
 const scoreTitle = document.querySelector("#score-title");
 const startAgainBtn = document.querySelector("#start-again-btn");
@@ -31,39 +31,39 @@ const timerClock = document.querySelector(".timer");
 
 export const answerBtns = [...document.querySelectorAll(".answer-btn")];
 
-let choosenDificulty = config.DIFICULTY;
-let choosenCategories = config.CATEGORIES;
+let chosenDifficulty = config.DIFFICULTY;
+let chosenCategories = config.CATEGORIES;
 const setOfAnswers = [];
 let questionCounter = 0;
 let scoreCounter = 0;
 let data;
-let Timer;
+let timer = runTimer(timerClock);
 
 //EventListeners
-easyDificultyBtn.addEventListener("click", () => {
-    choosenDificulty = 'easy';
+easyDifficultyBtn.addEventListener("click", () => {
+    chosenDifficulty = 'easy';
     dificultyBtn.textContent = 'Easy';
-    dificultyParagraph.textContent = 'EASY';
+    difficultyParagraph.textContent = 'EASY';
 })
 
-mediumDificultyBtn.addEventListener("click", () => {
-    choosenDificulty = 'medium';
+mediumDifficultyBtn.addEventListener("click", () => {
+    chosenDifficulty = 'medium';
     dificultyBtn.textContent = 'Medium';
-    dificultyParagraph.textContent = 'MEDIUM';
+    difficultyParagraph.textContent = 'MEDIUM';
 })
 
-hardDificultyBtn.addEventListener("click", () => {
-    choosenDificulty = 'hard';
+hardDifficultyBtn.addEventListener("click", () => {
+    chosenDifficulty = 'hard';
     dificultyBtn.textContent = 'Hard';
-    dificultyParagraph.textContent = 'HARD';
+    difficultyParagraph.textContent = 'HARD';
 })
 
 categoriesForm.addEventListener("change", () => {
     let selectedCategories = [...document.querySelectorAll("#categories-form input[type='checkbox']:checked")];
-    choosenCategories = selectedCategories.map((category => category.value));
+    chosenCategories = selectedCategories.map((category => category.value));
     if(selectedCategories.length === 0){
         categoriesBtn.textContent = 'Categories: ALL';
-        choosenCategories = config.CATEGORIES;
+        chosenCategories = config.CATEGORIES;
     }
     else
         categoriesBtn.textContent = 'Categories: ' + selectedCategories.length;
@@ -80,12 +80,11 @@ exitBtn.addEventListener("click", () => {
 });
 
 startBtn.addEventListener("click", async () => {
-    data = await config.getQuestions(choosenCategories, choosenDificulty, numOfQuestionsSlider.value);
+    data = await config.getQuestions(chosenCategories, chosenDifficulty, numOfQuestionsSlider.value);
     if(!data){
         alert("No internet connection!");
         return;
     }
-
     startGameContainer.style.display = 'none';
     playGameContainer.style.display = 'flex';
     assignBtnEvents();
@@ -110,31 +109,18 @@ const arrangeAllAnswers = (question) => {
 
     answerBtns.forEach((button, i) => {
         button.textContent = setOfAnswers[i];
-        button.classList.remove("correct-answer-btn", "wrong-answer-btn");        
+        button.classList.remove("correct-answer-btn", "wrong-answer-btn");
     });
-        
-    answerBtns.forEach((button, i) => {
-        button.textContent = setOfAnswers[i];   
-    })
 };
 
 const getNewQuestion = () => {
     if(questionCounter == numOfQuestionsSlider.value){
-        playGameContainer.style.display = 'none';
-        finishContainer.style.display = 'flex';
-        finishNickname.textContent = nickname.value;
-        finishScore.textContent = `${scoreCounter}/${numOfQuestionsSlider.value}`
-        if(scoreCounter >= +numOfQuestionsSlider.value / 2){
-            finishQuote.textContent = config.victoryQuotes[Math.floor(Math.random() * config.victoryQuotes.length)]
-        }
-        else{
-            finishQuote.textContent = config.failureQuotes[Math.floor(Math.random() * config.failureQuotes.length)];
-        }
+        finishGame();
         return;
     }
-    timerClock.classList.add("show");
     setOfAnswers.length = 0;
-    Timer = runTimer(document.querySelector('.timer'));
+    timer.resetTimer();
+    timer.startTimer();
     questionText.textContent = data[questionCounter].question.text;
     questionNumber.textContent = `${questionCounter + 1}/${numOfQuestionsSlider.value}`;
     arrangeAllAnswers(data[questionCounter]);
@@ -145,15 +131,8 @@ const assignBtnEvents = () => {
     answerBtns.forEach(button => {
         button.addEventListener("click", async () => {
             if (button.disabled) return;
-            Timer.stopTimer();
-            answerBtns.forEach((btn) => {
-                if (btn.textContent === data[questionCounter - 1].correctAnswer)
-                    btn.classList.add("correct-answer-btn");
-                else
-                    btn.classList.add("wrong-answer-btn");
-
-                btn.disabled = true;
-            });
+            timer.stopTimer();
+            highlightAnswers();
 
             if (button.textContent === data[questionCounter - 1].correctAnswer) {
                 scoreCounter++;
@@ -170,10 +149,10 @@ const resetGameParameters = () => {
     nickname.value = '';
     numOfQuestionsSlider.value = config.SLIDER_VALUE;
     numOfQuestionsParagraph.textContent = config.SLIDER_VALUE;
-    choosenDificulty = config.DIFICULTY;
+    chosenDifficulty = config.DIFFICULTY;
     dificultyBtn.textContent = 'Choose Dificulty'
     categoriesBtn.textContent = 'Choose Categories';
-    choosenCategories = config.CATEGORIES;
+    chosenCategories = config.CATEGORIES;
     let selectedCategories = [...document.querySelectorAll("#categories-form input[type='checkbox']:checked")];
     selectedCategories.forEach(checkbox => checkbox.checked = false);
     setOfAnswers.length = 0;
@@ -185,20 +164,33 @@ const resetGameParameters = () => {
             btn.classList.remove("wrong-answer-btn");
             btn.disabled = false;
     });
-
-    if (Timer){
-        Timer.resetTimer();
-    }
 };
 
 export const TimeFail = async () => {
+    highlightAnswers();
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    getNewQuestion();
+}
+
+const finishGame = () => {
+    playGameContainer.style.display = 'none';
+    finishContainer.style.display = 'flex';
+    finishNickname.textContent = nickname.value;
+    finishScore.textContent = `${scoreCounter}/${numOfQuestionsSlider.value}`
+
+    if(scoreCounter >= +numOfQuestionsSlider.value / 2)
+        finishQuote.textContent = config.VICTORY_QUOTES[Math.floor(Math.random() * config.VICTORY_QUOTES.length)]
+    else
+        finishQuote.textContent = config.FAILURE_QUOTES[Math.floor(Math.random() * config.FAILURE_QUOTES.length)];
+}
+
+const highlightAnswers = () => {
     answerBtns.forEach((btn) => {
         if (btn.textContent === data[questionCounter - 1].correctAnswer)
             btn.classList.add("correct-answer-btn");
         else
             btn.classList.add("wrong-answer-btn");
+
         btn.disabled = true;
     });
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    getNewQuestion();
 }

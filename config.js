@@ -1,9 +1,9 @@
-export const DIFICULTY = 'easy,medium,hard';
+export const DIFFICULTY = 'easy,medium,hard';
 export const CATEGORIES = 'music,history,science,geography,film_and_tv';
 export const SCORE_TITLE = 'Score: ';
 export const SLIDER_VALUE = 10;
 
-export const victoryQuotes = [
+export const VICTORY_QUOTES = [
     "Knowledge is power – and I just proved it!",
     "I came, I saw, I conquered… the quiz!",
     "Brains over luck, every time!",
@@ -16,7 +16,7 @@ export const victoryQuotes = [
     "Quiz conquered. Next challenge?"
 ];
 
-export const failureQuotes = [
+export const FAILURE_QUOTES = [
     "Failure is just a step toward success!",
     "I didn’t lose; I learned.",
     "Mistakes are proof that I’m trying.",
@@ -29,9 +29,9 @@ export const failureQuotes = [
     "It’s not about how many times you fail, but how many times you rise!"
 ];
 
-export async function getQuestions(categories, dificulty, numOfQuestions) {
+export async function getQuestions(categories, difficulty, numOfQuestions) {
     try {
-        const response = await fetch(`https://the-trivia-api.com/v2/questions?limit=${numOfQuestions}&difficulties=${dificulty}&categories=${categories}`);
+        const response = await fetch(`https://the-trivia-api.com/v2/questions?limit=${numOfQuestions}&difficulties=${difficulty}&categories=${categories}`);
         if (!response.ok) {
             throw new Error(`Error! Status: ${response.status}`);
         }

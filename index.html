@@ -12,10 +12,10 @@
     <div class="main-action-container" id="start-game-container">
       <div id="header-title">
         <h1>⚡</h1>
-        <h1>Mind Rush<br/>Quiz Game</h1>
+        <h1>Mind Rush -  Quiz Game</h1>
         <h1>⚡ </h1>
       </div>
-      <div class="input-div">
+      <div class="input-container">
         <label for="nickname">Enter your name</label>
         <input type="text" name="nickname" id="nickname" />
       </div>
@@ -34,14 +34,14 @@
       </div>
 
       <div class="dropdown">
-        <button id="dificulty-choose-btn" class="main-btn dropbtn">Choose Dificulty</button>
+        <button id="difficulty-choose-btn" class="main-btn dropbtn">Choose Difficulty</button>
         <div class="dropdown-content">
-          <button id="easy-dificulty-btn">EASY</button>
-          <button id="medium-dificulty-btn">MEDIUM</button>
-          <button id="hard-dificulty-btn">HARD</button>
+          <button id="easy-difficulty-btn">EASY</button>
+          <button id="medium-difficulty-btn">MEDIUM</button>
+          <button id="hard-difficulty-btn">HARD</button>
         </div>
       </div>
-      <div class="input-div">
+      <div class="input-container">
         <label for="num-of-questions-slider">Choose number of questions</label>
         <p id="num-of-questions">10</p>
         <input type="range" min="1" max="50" value="10"  id="num-of-questions-slider" />
@@ -53,7 +53,7 @@
     <div class="main-action-container" id="play-game-container">
       <div id="header-top-container">
         <button id="exit-btn">X</button>
-        <p id="dificulty-paragraph">ALL DIFICULTIES</p>
+        <p id="difficulty-paragraph">ALL DIFFICULTIES</p>
         <p id="question-number-header">1/10</p>
     </div>
       <h2 id="score-title">Score: 0</h2>
@@ -64,7 +64,7 @@
             <circle cx="50" cy="50" r="40" />
             <circle cx="50" cy="50" r="40" pathLength="1" />
             <text x="50" y="50" text-anchor="middle" dominant-baseline="middle">
-              <tspan id="timeLeft">10</tspan>
+              <tspan id="timeLeft-number">10</tspan>
             </text>
           </svg>          
         </div>
